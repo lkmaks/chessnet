@@ -1,0 +1,11 @@
+DROP TABLE RealPlayer;
+DROP TABLE OnlineUser;
+DROP TABLE Article;
+DROP TABLE Comment;
+DROP TABLE OnlineGame;
+DROP TABLE UserInOnlineGame;
+DROP TABLE Tournament;
+DROP TABLE PlayerInTournament;
+DROP TABLE RealGame;
+DROP TABLE PlayerInRealGame;
+DROP TABLE Task;

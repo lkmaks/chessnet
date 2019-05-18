@@ -1,0 +1,5 @@
+no check in realplayer
+country in realplayer
+realgame control type
+country varchar(50)
+
