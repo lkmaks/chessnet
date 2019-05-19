@@ -1,14 +1,12 @@
-from inserts import *
 from generate import *
 from rating_graphic import *
-from selects import *
 
-N = 10
+N = 5
 cnt_players = N
-cnt_tournaments = 400
-average_tours = 50
-cnt_users = N
-cnt_tasks = N * 2
+cnt_tournaments = 20
+average_tours = 400
+cnt_users = 400
+cnt_tasks = 400
 
 with psycopg2.connect(dbname='chessnet', user='max', password='max', host='localhost') as conn:
     clean_db(conn)

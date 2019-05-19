@@ -83,13 +83,15 @@ def generate(conn, cnt_players, cnt_tournaments, average_tours, cnt_users, cnt_t
 
     tournament_names = [random_tournament_name() for _ in range(cnt_tournaments)]
     tournament_dates = [random_tournament_date() for _ in range(cnt_tournaments)]
-    tournament_rules = [random.choice(['Swiss', 'Random', 'Round', 'Double-elimination', 'Single-elimination']) for _ in range(cnt_tournaments)]
+    tournament_rules = [random.choice(['Swiss', 'Random', 'Round', 'Double-elimination', 'Single-elimination'])
+                        for _ in range(cnt_tournaments)]
     tmp = list(set(countries))
     tournament_countries = [random.choice(tmp) for _ in range(cnt_tournaments)]
     infos = [random_tournament_name() for _ in range(cnt_tournaments)]
     tournament_ids = []
     for i in range(cnt_tournaments):
-        tournament_ids.append(add_tournament(tournament_names[i], tournament_dates[i][0], tournament_dates[i][1], tournament_rules[i], tournament_countries[i], infos[i], conn))
+        tournament_ids.append(add_tournament(tournament_names[i], tournament_dates[i][0], tournament_dates[i][1],
+                                             tournament_rules[i], tournament_countries[i], infos[i], conn))
 
     print(player_ids)
 
@@ -129,7 +131,9 @@ def generate(conn, cnt_players, cnt_tournaments, average_tours, cnt_users, cnt_t
                 time_left_1 = rand_time_left()
                 time_left_2 = rand_time_left()
                 date = shift(tournament_dates[i][0], random.randint(1, 5))
-                ret = add_real_game(p1, p2, result, time_left_1, time_left_2, date, control_type + random.choice(['fisher', 'boyomi']), control_type, tournament_ids[i], conn)
+                ret = add_real_game(p1, p2, result, time_left_1, time_left_2, date,
+                                    control_type + random.choice(['fisher', 'boyomi']),
+                                    control_type, tournament_ids[i], conn)
                 game_ids.append(ret)
 
     usernames = []

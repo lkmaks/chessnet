@@ -1,0 +1,12 @@
+
+create view white_winrate_table as
+    select t2.game_date, sum(wins_as_white) as sw, sum(draws_as_white) as sd, sum(losses_as_white) as sl
+    over(order by t2.game_date)
+    from realplayer g1 inner join
+         (playerinrealgame t1 inner join realgame t2 on t1.real_game_id = t2.id) g2
+         on g1.id = g2.real_player_id
+    where g1.id = (select min(id) from realplayer)
+
+
+
+

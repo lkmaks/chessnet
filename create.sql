@@ -75,6 +75,7 @@ CREATE TABLE OnlineGame (
     finish_time TIMESTAMP,
     duration INTEGER,
     time_control VARCHAR(40),
+    rating_delta INTEGER,
     PRIMARY KEY (id)
 );
 
@@ -98,6 +99,7 @@ CREATE TABLE Tournament (
     rule VARCHAR(20),
     country VARCHAR(50),
     tournament_info text,
+    rating_type VARCHAR(10),
     PRIMARY KEY (id)
 );
 

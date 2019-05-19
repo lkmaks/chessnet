@@ -69,10 +69,10 @@ def rand_time_left():
 
 
 def get_result_by_real_rating(r1, r2):
-    # if r1 > r2:
-    #     return 0
-    # else:
-    #     return 2
+    if r1 > r2:
+        return 0
+    else:
+        return 2
     e1 = 1 / (1 + 10 ** ((r2 - r1) / 400))
     p = random.randrange(0, 1000) / 1000
     draw_dist = min(e1, 1 - e1) * 0.3

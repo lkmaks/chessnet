@@ -36,6 +36,7 @@ def show_all_rating_graphics(control_type, case_data, conn):
             data = cursor.fetchall()
             x = [e[0] for e in data]
             y = [1000 + e[1] for e in data]
+            print(len(x))
             name = get_attr('realplayer', ids[i], 'name', conn)
             surname = get_attr('realplayer', ids[i], 'surname', conn)
             axes[i].set_title(name + ' ' + surname + ', real rating: {}'.format(str(real_rating[player_id])))
