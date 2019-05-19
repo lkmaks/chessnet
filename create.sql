@@ -127,6 +127,7 @@ CREATE TABLE PlayerInRealGame (
     real_game_id INTEGER,
     color VARCHAR(10),
     time_left VARCHAR(20),
+    rating_delta INTEGER,
     PRIMARY KEY (id),
     FOREIGN KEY (real_player_id) REFERENCES RealPlayer(id),
     FOREIGN KEY (real_game_id) REFERENCES RealGame(id)

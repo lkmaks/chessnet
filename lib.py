@@ -13,20 +13,36 @@ def sql_date(date):
 
 def new_ratings(rw, rb, res):
     # res: 0 - white, 1 - draw, 2 - black
-    delta = int(floor(sqrt(abs(rw - rb)))) + 5
+    white_points = 0
+    black_points = 0
     if res == 0:
-        rw += delta
-        rb -= delta
-    elif res == 2:
-        rw -= delta
-        rb += delta
+        white_points = 1
+        black_points = 0
     elif res == 1:
-        if rw < rb:
-            rw += delta // 2
-            rb -= delta // 2
-        else:
-            rw -= delta // 2
-            rb += delta // 2
+        white_points = 0.5
+        black_points = 0.5
+    elif res == 2:
+        white_points = 0
+        black_points = 1
+
+    kw = -1
+    if kw >= 2400:
+        kw = 10
+    else:
+        kw = 20
+
+    kb = -1
+    if kb >= 2400:
+        kb = 10
+    else:
+        kb = 20
+
+    ew = 1 / (1 + 10 ** ((rb - rw) / 400))
+    eb = 1 / (1 + 10 ** ((rw - rb) / 400))
+
+    rw = rw + kw * (white_points - ew)
+    rb = rb + kb * (black_points - eb)
+
     return rw, rb
 
 
@@ -37,7 +53,7 @@ def random_tournament_name(length=10):
     return ''.join(res)
 
 
-def random_tournament_date(length=9, year_from=2019, year_to=2029):
+def random_tournament_date(length=9, year_from=2019, year_to=2020):
     d = random.randint(1, 15)
     m = random.randint(1, 12)
     y = random.randint(year_from, year_to)
@@ -52,20 +68,22 @@ def rand_time_left():
     return str(h) + ':' + str(m)
 
 
-def get_result_by_rating(r1, r2):
-    p2 = int(floor(r1 / (r1 + r2 + 1000) * 100))
-    p1 = 100 - p2
-    p1 -= 20
-    p2 -= 20
-    p1 = max(p1, 0)
-    p2 = max(p2, 0)
-    x = random.randint(1, p1 + p2 + 40)
-    if x <= p1:
+def get_result_by_real_rating(r1, r2):
+    # if r1 > r2:
+    #     return 0
+    # else:
+    #     return 2
+    e1 = 1 / (1 + 10 ** ((r2 - r1) / 400))
+    p = random.randrange(0, 1000) / 1000
+    draw_dist = min(e1, 1 - e1) * 0.3
+    if e1 - draw_dist < p and p < e1 + draw_dist:
+        return 1
+    elif p <= e1 - draw_dist:
         return 0
-    elif x >= p1 + 40:
+    elif p >= e1 + draw_dist:
         return 2
     else:
-        return 1
+        return 0
 
 
 def shift(date, dist):

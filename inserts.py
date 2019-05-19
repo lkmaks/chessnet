@@ -37,7 +37,7 @@ def add_real_player(name, surname, country, conn):
     att_list = get_att_list('realplayer', conn)[1:]
     with conn.cursor() as cursor:
         query = "insert into realplayer ({}) values ('{}', '{}', '{}', {});"\
-            .format(','.join(att_list), name, surname, country, '0,' * 11 + '0')
+            .format(','.join(att_list), name, surname, country, '1000,' * 6 + '0,' * 5 + '0')
         cursor.execute(query)
         return get_last_id('realplayer', conn)
 
@@ -69,14 +69,6 @@ def add_real_game(white_id, black_id, result, time_left1, time_left2, date, time
         )
         cursor.execute(query)
         game_id = get_last_id('realgame', conn)
-        query = "insert into playerinrealgame (real_player_id, real_game_id, color, time_left) values ({}, {}, '{}', '{}')".format(
-            white_id, game_id, 'white', time_left1
-        )
-        cursor.execute(query)
-        query = "insert into playerinrealgame (real_player_id, real_game_id, color, time_left) values ({}, {}, '{}', '{}')".format(
-            black_id, game_id, 'black', time_left2
-        )
-        cursor.execute(query)
 
         # c1 = get_attr('tournament', tournament_id, 'country', conn)
         # c2 = get_attr('realplayer', white_id, 'country', conn)
@@ -91,6 +83,15 @@ def add_real_game(white_id, black_id, result, time_left1, time_left2, date, time
         query = 'update realplayer set {}_chess_{}_rating = {} WHERE id = {}'.format(typo, control_type, str(new_r1), white_id)
         cursor.execute(query)
         query = 'update realplayer set {}_chess_{}_rating = {} WHERE id = {}'.format(typo, control_type, str(new_r2), black_id)
+        cursor.execute(query)
+
+        query = "insert into playerinrealgame (real_player_id, real_game_id, color, time_left, rating_delta) values ({}, {}, '{}', '{}', {})".format(
+            white_id, game_id, 'white', time_left1, str(new_r1 - r1)
+        )
+        cursor.execute(query)
+        query = "insert into playerinrealgame (real_player_id, real_game_id, color, time_left, rating_delta) values ({}, {}, '{}', '{}', {})".format(
+            black_id, game_id, 'black', time_left2, str(new_r2 - r2)
+        )
         cursor.execute(query)
 
         if result == 0:
@@ -128,9 +129,12 @@ def add_player_to_tournament(player_id, tournament_id, conn):
 
 def add_task(author_username, online_game_from_id, real_game_from_id, task_body, difficulty, goal, task_type, conn):
     with conn.cursor() as cursor:
+        real_game_from_id = ("NULL" if real_game_from_id is None else real_game_from_id)
+        online_game_from_id = ("NULL" if online_game_from_id is None else online_game_from_id)
+
         query = 'insert into task (author_username, online_game_from_id, real_game_from_id, task_body, difficulty, goal, task_type) '
-        query += 'values ({}, {}, {}, {}, {}, {}, {})'.format(author_username, str(online_game_from_id),
-                                                              str(real_game_from_id), task_body, str(difficulty), goal,
+        query += "values ('{}', {}, {}, '{}', {}, '{}', '{}')".format(author_username, online_game_from_id,
+                                                              real_game_from_id, task_body, str(difficulty), goal,
                                                               task_type)
         cursor.execute(query)
 
